@@ -3,6 +3,12 @@ project(roguelike)
 
 set(CMAKE_CXX_STANDARD 23)
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_definitions(DEBUG)
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    add_compile_definitions(NDEBUG)
+endif()
+
 set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
@@ -18,6 +24,11 @@ function(collect_files DIR EXT OUT)
         endif()
     endforeach()
     set(${OUT} ${OUT_FILES} PARENT_SCOPE)
+
+    # DEBUG
+    list(LENGTH OUT_FILES FILES_LIST_LENGTH)
+    message(DEBUG "Collected ${FILES_LIST_LENGTH} files of .${EXT} extension.")
+    message(DEBUG "Files: ${OUT_FILES}")
 endfunction()
 
 collect_files(${SRC_DIR} "cpp" CPP_SOURCES)
